@@ -46,7 +46,7 @@ document.getElementById("space__cruiser").addEventListener("click", buySpaceCrui
 document.getElementById("space__destroyer").addEventListener("click", buySpaceDestroyer);
 
 function buySpaceShip(){
-    if (gold > 0) {
+    if (gold >= spaceShip.cost) {
     gold = gold - spaceShip.cost;
     resources.innerHTML = "You Have " + gold + " Gold to craft your army";
     army.push("1S");
@@ -55,7 +55,7 @@ function buySpaceShip(){
 }
 
 function buySpaceCruiser(){
-    if (gold > 0) {
+    if (gold >= spaceCruiser.cost) {
     gold = gold - spaceCruiser.cost;
     resources.innerHTML = "You Have " + gold + " Gold to craft your army";
     army.push("1C");
@@ -63,7 +63,7 @@ function buySpaceCruiser(){
     } else (alert("You can't spend more than 10 gold to craft your army"))
 }
 function buySpaceDestroyer(){
-    if (gold > 0) {
+    if (gold >= spaceDestroyer.cost) {
     gold = gold - spaceDestroyer.cost;
     resources.innerHTML = "You Have " + gold + " Gold to craft your army";
     army.push("1D");

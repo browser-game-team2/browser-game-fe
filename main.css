@@ -1,0 +1,131 @@
+body {
+margin: auto;
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+background-image: url(/Images/pexels-photo-110854.jpeg);
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+
+h1{
+    margin-top: 0px;
+    padding-top: 20px;
+    color: white;
+    width: 80%;
+    border-radius: 4px;
+    text-align: center;
+    height: 60px;
+    background-image: linear-gradient(to bottom, #04132a, #192542, #2f385bbd, #474c75c9, #606090c5);
+}
+
+#logo {
+    margin-top: 1rem;
+    width: 150px;
+    height: 150px;
+}
+
+.box {
+    
+    background-image: linear-gradient(to bottom, #04132a, #192542b7, #2f385b, #474c75c5, #606090c2);
+    margin-top: 4rem;
+    border-radius: 4px;
+    height: 350px;
+    width: 20rem;
+}
+/*Authentication*/
+
+#authentication {
+    margin-top: 20px;
+    text-align: center;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: sans-serif;
+    font-size: 24px;
+    color: white;
+}
+
+.authentication__logos {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+
+}
+
+.ouath__logos {
+    width: 60px;
+    height: 60px;
+}
+
+.ouath__logos:hover{
+    cursor: pointer;
+}
+
+/*inputs for nickname and planet name*/
+
+#inputs {
+    margin: 80px 40px;
+    text-align: center;
+    height: 60%;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+
+.input__field {
+    width: 90%;
+    height: 40px;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 2px;
+    border: solid 0.3px;
+    padding-left: 15px;
+}
+
+#confirm__button{
+    height: 30px;
+    width: 60%;
+    margin: 20px auto;
+    border: none;
+    border-radius: 6px;
+    background-color: red;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+#confirm__button:hover{
+    cursor: pointer;
+}
+
+/*create army section*/
+
+.create__army{
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 30px;
+    height: 80%;
+    justify-content: space-between;
+    color: white;
+    font-family: sans-serif;
+}
+
+#army{
+    margin-top: 20px;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.army__unities:hover {
+    cursor: pointer;
+}

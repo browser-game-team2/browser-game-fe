@@ -7,10 +7,13 @@ const createArmy = document.getElementById("create__army");
 const userName = document.getElementById("username");
 const planetName = document.getElementById("planet__name");
 const resources = document.getElementById("resources");
+const startGame = document.querySelector(".start-game__btn");
+
 
 facebookAuthentication.addEventListener("click", changeBoxContent);
 googleAuthentication.addEventListener("click", changeBoxContent);
 confirmButton.addEventListener("click", changeBoxContent2);
+startGame.addEventListener("click", boardGenerator);
 
 //after the ouath, display inputs to choose nickname and planet name
 
@@ -71,4 +74,8 @@ function buySpaceDestroyer(){
     } else (alert("You can't spend more than 10 gold to craft your army"))
 }
 
+
+function boardGenerator() {
+    
+}
 

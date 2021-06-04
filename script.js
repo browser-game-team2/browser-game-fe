@@ -13,8 +13,9 @@ const startGame = document.querySelector(".start-game__btn");
 facebookAuthentication.addEventListener("click", changeBoxContent);
 googleAuthentication.addEventListener("click", changeBoxContent);
 confirmButton.addEventListener("click", changeBoxContent2);
-startGame.addEventListener("click", boardGenerator);
 
+let cpuArmy = [];
+let humanArmy = [];
 
 const armySelection = {
     "SpaceShip": 1,
@@ -22,8 +23,6 @@ const armySelection = {
     "spaceDestroyer": 5,
 }
 
-let gold = 10;
-let goldCpu = 10;
 //after the ouath, display inputs to choose nickname and planet name
 
 function changeBoxContent() {
@@ -42,45 +41,73 @@ function changeBoxContent2(){
 
 //each unity has a cost to subtract from the total of gold
 class Unities {
-    constructor (name, power, cost) {
+    constructor (type, name, power, cost, gold) {
+        this.type = type;
         this.name = name;
         this.power = power;
         this.cost = cost;
+        this.gold = gold
     }
     buyShip() {
-        if (gold >= this.cost) {
-            gold = gold - this.cost;
-            resources.innerHTML = "You Have " + gold + " Gold to craft your army";
-            army.push(this.name);
-            } else (resources.innerHTML = "You can't spend more than 10 gold to craft your army")
+        // if the user is human add the army into human army
+        if(this.type === "Human") {
+            humanArmy.push(this.name);
+        } else {
+            cpuArmy.push(this.name);
         }
     }
-
-let army = [];
-
-document.querySelectorAll(".army__unities").forEach(e => e.addEventListener("click", buyArmy));
-
-function buyArmy() {
-    // I generate the object taking the first letter with slice and the number (the cost)
-    console.log(parseInt(this.innerText.match(/\d+/)[0]));
-    const spaceShip = new Unities (this.innerText.slice(0,1), "??", parseInt(this.innerText.match(/\d+/)[0]));
-    spaceShip.buyShip();
 }
 
 
-function boardGenerator() {
-    let cpuArmy = [];
-    let goldCpu = 10;
-    while(goldCpu > 0) {
-        const army = Object.keys(armySelection);
-        const randomArmy = army[Math.floor(Math.random() * army.length)];
-        const armyCost = armySelection[randomArmy];
-        const spaceShip = new Unities (randomArmy, "??", armyCost, goldCpu);
-        spaceShip.buyShip();
-        cpuArmy.push(randomArmy);
-        goldCpu -= armyCost;
-        console.log(goldCpu );
+
+
+(function humanUser() {
+    document.querySelectorAll(".army-type").forEach(e => e.removeEventListener("click", buyArmy));
+    document.querySelectorAll(".army-type").forEach(e => e.addEventListener("click", buyArmy));
+
+    let gold = 10;
+
+    
+    function buyArmy() {
+        // the cost of the selected army taken from armySelection
+        const armyCost = armySelection[this.innerText];
+
+        if(gold >= armyCost) {
+            const spaceShip = new Unities ("Human", this.innerText, "??", armyCost, gold);
+            gold -= armyCost;
+            resources.innerHTML = "You Have " + gold + " Gold to craft your army";
+            spaceShip.buyShip();
+        } else {
+            return resources.innerHTML = "You can't spend more than 10 gold to craft your army"
+        }
     }
-    console.log(cpuArmy);
-}
+})();
+
+
+(function cpuUser() {
+
+    let goldCpu = 10;
+    startGame.removeEventListener("click", cpuGenerator);
+    startGame.addEventListener("click", cpuGenerator);
+    function cpuGenerator() {
+        
+        while(goldCpu > 0) {
+            // take all the keys from armySelection
+            const army = Object.keys(armySelection);
+            //take a random type of army and find the cost in armyCost;
+            const randomArmy = army[Math.floor(Math.random() * army.length)];
+            const armyCost = armySelection[randomArmy];
+
+            if(goldCpu >= armyCost) {
+                const spaceShip = new Unities ("CPU",randomArmy, "??", armyCost, goldCpu);
+                spaceShip.buyShip();
+                goldCpu -= armyCost;
+            } else {
+                // if the armyCost is bigger than goldCpu then call the function again to generate another random army
+                return cpuGenerator();
+            }
+        }
+    }
+})();
+
 

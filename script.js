@@ -10,14 +10,6 @@ const resources = document.getElementById("resources");
 const startGame = document.querySelector(".start-game__btn");
 
 
-facebookAuthentication.addEventListener("click", changeBoxContent);
-googleAuthentication.addEventListener("click", changeBoxContent);
-confirmButton.addEventListener("click", changeBoxContent2);
-
-
-
-
-
 class Unities {
     constructor (army, cost) {
         this.army = army;
@@ -25,7 +17,7 @@ class Unities {
     }
 }
 
-class composeArmy {
+class ComposeArmy {
     constructor(type) {
         this.type = type;
         this.army = [];
@@ -56,7 +48,7 @@ class composeArmy {
                 //take a random type of army and find the cost in armyCost;
                 const randomArmy = army[Math.floor(Math.random() * army.length)];
                 const armyCost = armySelection[randomArmy];
-                
+
                 if(gold >= armyCost) {
                     event.army.push(new Unities(randomArmy, armyCost));
                     gold -= armyCost;
@@ -82,7 +74,7 @@ class Player {
     }
 }
 
-class gameBoard {
+class GameBoard {
     constructor() {
         this.players = [];
     }
@@ -91,11 +83,18 @@ class gameBoard {
     } 
 }
 
-const humanArmy = new composeArmy("Human");
-const cpuArmy = new composeArmy("CPU");
+const humanArmy = new ComposeArmy("Human");
+const cpuArmy = new ComposeArmy("CPU");
 cpuArmy.create()
 humanArmy.create();
-const game = new gameBoard();
+const game = new GameBoard();
+
+(function init() {
+    facebookAuthentication.addEventListener("click", changeBoxContent);
+    googleAuthentication.addEventListener("click", changeBoxContent);
+    confirmButton.addEventListener("click", changeBoxContent2);
+})();
+
 
 
 

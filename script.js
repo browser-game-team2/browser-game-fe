@@ -10,6 +10,10 @@ const resources = document.getElementById("resources");
 const startGame = document.querySelector(".start-game__btn");
 
 
+const playButton = document.querySelector(".play__btn");
+
+
+
 class Unities {
     constructor (army, cost) {
         this.army = army;
@@ -93,8 +97,44 @@ const game = new GameBoard();
     facebookAuthentication.addEventListener("click", changeBoxContent);
     googleAuthentication.addEventListener("click", changeBoxContent);
     confirmButton.addEventListener("click", changeBoxContent2);
+    playButton.addEventListener("click", playGame);
 })();
 
+
+
+const data = 
+    {
+        "attacker": {
+            "uid": "108403865994034697381",
+            "username":"human player 1",
+             "army":{
+                "S":2,
+                "C":1,
+                "D":0,
+                "F":1
+             },
+             "planet":"Venus"
+          }
+
+      }
+
+function playGame() {
+    fetch("https://browsergameteam2.herokuapp.com/battle/", {
+    method: 'POST', // or 'PUT'
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    
+    body: JSON.stringify(data),
+    })
+    .then(response => response.json())
+    .then(data1 => {
+    console.log('Success:', data1);
+    })
+    .catch((error) => {
+    console.error('Error:', error);
+    });
+}
 
 
 

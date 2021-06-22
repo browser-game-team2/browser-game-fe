@@ -149,3 +149,14 @@ h1{
     font-size: 14px;
     font-weight: bold;
 }
+
+.play__btn {
+    padding:20px;
+    background-color: red;
+    display:inline-block;
+    width:50%;   
+    border-radius:6px;
+    cursor:pointer;
+    font-size: 14px;
+    font-weight: bold;
+}

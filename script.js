@@ -130,10 +130,13 @@ function playGame() {
     .then(response => response.json())
     .then(data1 => {
     console.log('Success:', data1);
+    displayBattleReport(data1);
     })
     .catch((error) => {
     console.error('Error:', error);
     });
+    
+    
 }
 
 
@@ -163,3 +166,24 @@ startGame.addEventListener("click", function() {
 });
 
 
+
+//display battle report 
+
+function displayBattleReport(data1){
+    document.getElementById("box").innerHTML = " ";
+    var result = document.createElement("div");
+    result.className = "battle__result";
+    document.getElementById("box").appendChild(result);
+    //a function to check if the player is the winner or the loser of the battle
+    function checkScore(data1) {
+        if (data1.winner = "true"){
+        result.innerHTML = "Congratulations" + "<br>" + "You Win!";
+    } else (result.innerHtml = "You Lose!");
+    }
+    checkScore(data1);
+    //create a new element to display the report of the battle
+    var battleReport = document.createElement("div");
+    battleReport.className = "battle__report";
+    result.appendChild(battleReport);
+    battleReport.innerHTML = "Unities left after the battle:" + "<br>" + "<br>" + "C =" + " " + data1.army.C + "<br>" + "<br>" +  "S =" + " " + data1.army.S + "<br>" + "<br>" + " " +  "D =" + " " + data1.army.D;
+}

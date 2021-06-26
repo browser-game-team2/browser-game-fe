@@ -160,3 +160,23 @@ h1{
     font-size: 14px;
     font-weight: bold;
 }
+
+/*battle report*/
+.battle__result {
+    margin-top: 30px;
+    text-align: center;
+    height: 60%;
+    display: flex;
+    flex-direction: column; 
+    font-family: sans-serif;
+    font-size: 32px;
+    color: white;
+}
+.battle__report {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    color: white;
+    font-size: 18px;
+}

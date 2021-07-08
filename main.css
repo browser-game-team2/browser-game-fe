@@ -72,9 +72,9 @@ h1{
     margin: 80px 40px;
     text-align: center;
     height: 60%;
-    display: none;
+    display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-around;
     
 }
 

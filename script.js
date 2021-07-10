@@ -94,8 +94,6 @@ humanArmy.create();
 const game = new GameBoard();
 
 (function init() {
-    facebookAuthentication.addEventListener("click", changeBoxContent);
-    googleAuthentication.addEventListener("click", changeBoxContent);
     confirmButton.addEventListener("click", changeBoxContent2);
     playButton.addEventListener("click", playGame);
 })();
@@ -140,19 +138,10 @@ function playGame() {
 }
 
 
-
-//after the ouath, display inputs to choose nickname and planet name
-function changeBoxContent() {
-    authentication.style.display = "none";
-    inputs.style.display = "flex";
-}
-
-
 //display nickname and planet name choosen by user and the quantity of gold to craft the army
 function changeBoxContent2(){
     inputs.style.display = "none";
     createArmy.style.display = "flex";
-    userName.innerHTML = "Username:" + " " + document.getElementById("input__username").value;
     planetName.innerHTML = "Planet name:" + " " + document.getElementById("input__planet__name").value;
     game.players.push(new Player("Human", document.getElementById("input__username").value, "test@gmail.com", document.getElementById("input__planet__name").value));
     game.players.push(new Player("CPU", "Computer1", "", "Venus"));

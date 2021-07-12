@@ -40,11 +40,20 @@ const playButton = document.querySelector(".play__btn");
         // call create method passing the budget and the army with the price object
         cpuArmy.create(data.budget, data.prices)
         humanArmy.create(data.budget, data.prices);
+        // instance the gameBoard object 
         const game = new GameBoard();
+        /*push inside the players array (property of gameBoard) the player created, Human or CPU with the property:
+                this.type = type;
+                this.name = name;
+                this.id = id;
+                this.planet = planet;
+                this.playerArmy = [];  empty array
+        */
         game.players.push(new Player("Human", "", "test@gmail.com", document.getElementById("input__planet__name").value));
         game.players.push(new Player("CPU", "Computer1", "", "Venus"));
 
         startGame.addEventListener("click", function() {
+            // inside the playerArmy array (now inside the players array that is inside GameBoard) push the army created
             game.players[0].playerArmy.push(humanArmy.create());
             game.players[1].playerArmy.push(cpuArmy.create())
             game.createGame();
@@ -103,14 +112,18 @@ class ComposeArmy {
         this.army = [];
     }
     create(budget, armySelection) {
+        //the initial budget i'll use for the error message
         const initial = budget;
         const event = this;
+        //if the type of the army is "Human"
         if(this.type === "Human") {
+            // select all the army-type (spaceCruiser, Destroyer ...)
             document.querySelectorAll(".army-type").forEach(e => e.addEventListener("click", function() {
-                console.log(armySelection[this.getAttribute("id")]);
+                //find the cost of them with the armySelection object using the id {S:5 ecc}
                 const armyCost = armySelection[this.getAttribute("id")];
-                console.log(budget > armyCost, budget, armyCost);
+                // if there are less than 10 army and the budget is more than the army cost
                 if(event.army.length < 10 && budget > armyCost) {
+                    // push the UNITIES with name and cost inside the army array used inside composeArmy
                     event.army.push(new Unities(this.innerText, armyCost));
                     budget -= armyCost;
                     resources.innerHTML = "You Have " + budget + " Gold to craft your army";
@@ -119,15 +132,16 @@ class ComposeArmy {
                 }
             }));  
             return event.army;
+            // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
         } else {
             while(budget > 0 && event.army.length < 10) {
                 const army = Object.keys(armySelection);
-                console.log(army);
+
                 //take a random type of army and find the cost in armyCost;
                 const randomArmy = army[Math.floor(Math.random() * army.length)];
-                console.log(randomArmy);
+
                 const armyCost = armySelection[randomArmy];
-                console.log(armyCost)
+
                 if(budget >= armyCost) {
                     event.army.push(new Unities(randomArmy, armyCost));
                     budget -= armyCost;
@@ -143,10 +157,10 @@ class ComposeArmy {
 }
 
 class Player {
-    constructor(type, name, email, planet) {
+    constructor(type, name, id, planet) {
         this.type = type;
         this.name = name;
-        this.email = email;
+        this.id = id;
         this.planet = planet;
         this.playerArmy = [];
     }

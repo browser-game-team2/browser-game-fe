@@ -33,12 +33,13 @@ const playButton = document.querySelector(".play__btn");
         for(const [army,values] of Object.entries(data.prices)) {
             createArmySelection(army, values);
         }
-
+//function to create the strategy selection
         for(const strategy of data["F"]) {
             createStrategySelection(strategy);
         }
-
+        //find a randomStrategy for the CPU
         const randomStrategy = data["F"][Math.floor(Math.random() * data["F"].length)];
+
         // compose the army of human an cpu players
         const humanArmy = new ComposeArmy("Human");
         const cpuArmy = new ComposeArmy("CPU");
@@ -142,9 +143,7 @@ class ComposeArmy {
                     return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
                 }
             }));  
-            if(strategy) {
-                event.army.push(strategy);
-            }
+            if(strategy) event.army.push(strategy);
             return event.army;
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
         } else {

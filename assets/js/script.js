@@ -10,7 +10,7 @@ const planetName = document.getElementById("planet__name");
 const resources = document.getElementById("resources");
 const startGame = document.querySelector(".start-game__btn");
 const armyChoice = document.querySelector(".army");
-
+const strategySelector = document.querySelector(".select-strategy__selector");
 const playButton = document.querySelector(".play__btn");
 
 
@@ -33,12 +33,17 @@ const playButton = document.querySelector(".play__btn");
         for(const [army,values] of Object.entries(data.prices)) {
             createArmySelection(army, values);
         }
+
+        for(const strategy of data["F"]) {
+            createStrategySelection(strategy);
+        }
+
+        const randomStrategy = data["F"][Math.floor(Math.random() * data["F"].length)];
         // compose the army of human an cpu players
         const humanArmy = new ComposeArmy("Human");
         const cpuArmy = new ComposeArmy("CPU");
 
         // call create method passing the budget and the army with the price object
-        cpuArmy.create(data.budget, data.prices)
         humanArmy.create(data.budget, data.prices);
         // instance the gameBoard object 
         const game = new GameBoard();
@@ -49,22 +54,21 @@ const playButton = document.querySelector(".play__btn");
                 this.planet = planet;
                 this.playerArmy = [];  empty array
         */
-        game.players.push(new Player("Human", "", "test@gmail.com", document.getElementById("input__planet__name").value));
+        game.players.push(new Player("Human", data.username, document.getElementById("input__planet__name").value));
         game.players.push(new Player("CPU", "Computer1", "", "Venus"));
 
         startGame.addEventListener("click", function() {
             // inside the playerArmy array (now inside the players array that is inside GameBoard) push the army created
-            game.players[0].playerArmy.push(humanArmy.create());
-            game.players[1].playerArmy.push(cpuArmy.create())
+            game.players[0].playerArmy.push(humanArmy.create(data.budget, data.prices, document.querySelector(".select-strategy__selector").value));
+            game.players[1].playerArmy.push(cpuArmy.create(data.budget, data.prices, randomStrategy))
             game.createGame();
         });
     })
     .catch((error) => {
-    console.error('Error:', error);
+        console.error('Error:', error);
     });
     
     confirmButton.addEventListener("click", changeBoxContent2);
-    playButton.addEventListener("click", playGame);
 })();
 
 
@@ -95,7 +99,14 @@ function createArmySelection(army, values) {
     armyChoice.appendChild(chooseArmy);
     chooseArmy.appendChild(armyType);
     chooseArmy.appendChild(armyCost);
-    
+}
+
+function createStrategySelection(strategy) {
+    const optionStrategy = document.createElement("option");
+    optionStrategy.className = "strategy";
+    optionStrategy.value = strategy;
+    optionStrategy.innerText = strategy;
+    strategySelector.appendChild(optionStrategy);
 }
 
 
@@ -111,7 +122,7 @@ class ComposeArmy {
         this.type = type;
         this.army = [];
     }
-    create(budget, armySelection) {
+    create(budget, armySelection, strategy) {
         //the initial budget i'll use for the error message
         const initial = budget;
         const event = this;
@@ -131,15 +142,21 @@ class ComposeArmy {
                     return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
                 }
             }));  
+            if(strategy) {
+                event.army.push(strategy);
+            }
             return event.army;
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
         } else {
+            const randomStrategy = [];
+            randomStrategy.push(strategy);
+           
+            const random = randomStrategy[Math.floor(Math.random() * randomStrategy.length)];
+            console.log(random);
             while(budget > 0 && event.army.length < 10) {
                 const army = Object.keys(armySelection);
-
                 //take a random type of army and find the cost in armyCost;
                 const randomArmy = army[Math.floor(Math.random() * army.length)];
-
                 const armyCost = armySelection[randomArmy];
 
                 if(budget >= armyCost) {
@@ -147,9 +164,10 @@ class ComposeArmy {
                     budget -= armyCost;
                 } else {
                     // if the armyCost is bigger than goldCpu then call the function again to generate another random army
-                    return create();
+                    return this.create();
                 }
             }
+            event.army.push(random);
             return event.army;
         }
          
@@ -157,12 +175,11 @@ class ComposeArmy {
 }
 
 class Player {
-    constructor(type, name, id, planet) {
+    constructor(type, username, planet) {
         this.type = type;
-        this.name = name;
-        this.id = id;
-        this.planet = planet;
+        this.username = username;
         this.playerArmy = [];
+        this.planet = planet;
     }
 }
 

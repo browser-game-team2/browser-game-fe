@@ -2,267 +2,272 @@ const facebookAuthentication = document.getElementById("fb__logo");
 const googleAuthentication = document.getElementById("google__logo");
 const authentication = document.getElementById("authentication");
 const inputs = document.getElementById("inputs");
-const inputPlanet = document.querySelector(".input__field");
 const confirmButton = document.getElementById("confirm__button");
 const createArmy = document.getElementById("create__army");
 const userName = document.getElementById("username");
 const planetName = document.getElementById("planet__name");
 const resources = document.getElementById("resources");
 const startGame = document.querySelector(".start-game__btn");
-const armyChoice = document.querySelector(".army");
-const strategySelector = document.querySelector(".select-strategy__selector");
+
 const playButton = document.querySelector(".play__btn");
 
+// ======================================
+const spaceshipIncrement = document.querySelector(".spaceship__increment");
+const spaceshipDecrement = document.querySelector(".spaceship__decrement");
+const spacescruiserIncrement = document.querySelector(
+  ".spacecruiser__increment"
+);
+const spacecruiserDecrement = document.querySelector(
+  ".spacecruiser__decrement"
+);
+const spacedestroyerIncrement = document.querySelector(
+  ".spacedestroyer__increment"
+);
+const spacedestroyerDecrement = document.querySelector(
+  ".spacedestroyer__decrement"
+);
+let spaceshipItem = document.querySelector(".spaceship__item");
+let spacecruiserItem = document.querySelector(".spacecruiser__item");
+let spacedestroyerItem = document.querySelector(".spacedestroyer__item");
+let armyOperator = document.querySelectorAll(".army__operator");
 
-(function init() {
-    // request for choose test
-    fetch("https://browsergameteam2.herokuapp.com/choosetemp/", {
-    method: 'GET', // or 'PUT'
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    })
-    .then(response => response.json())
-    .then(data => {
-    console.log('Success:', data);
-    //function to create all the planet selection
-        for(const planet of data.planets) {
-            createPlanet(planet);
-        }
-    //function to create all the army and the cost before starting the game 
-        for(const [army,values] of Object.entries(data.prices)) {
-            createArmySelection(army, values);
-        }
-//function to create the strategy selection
-        for(const strategy of data["F"]) {
-            createStrategySelection(strategy);
-        }
-        //find a randomStrategy for the CPU
-        const randomStrategy = data["F"][Math.floor(Math.random() * data["F"].length)];
+let counter = 0;
+let counter1 = 0;
+let counter2 = 0;
 
-        // compose the army of human an cpu players
-        const humanArmy = new ComposeArmy("Human");
-        const cpuArmy = new ComposeArmy("CPU");
-
-        // call create method passing the budget and the army with the price object
-        humanArmy.create(data.budget, data.prices);
-        // instance the gameBoard object 
-        const game = new GameBoard();
-        /*push inside the players array (property of gameBoard) the player created, Human or CPU with the property:
-                this.type = type;
-                this.name = name;
-                this.id = id;
-                this.planet = planet;
-                this.playerArmy = [];  empty array
-        */
-        game.players.push(new Player("Human", data.username, document.getElementById("input__planet__name").value));
-        game.players.push(new Player("CPU", "Computer1", "", "Venus"));
-
-        startGame.addEventListener("click", function() {
-            // inside the playerArmy array (now inside the players array that is inside GameBoard) push the army created
-            game.players[0].playerArmy.push(humanArmy.create(data.budget, data.prices, document.querySelector(".select-strategy__selector").value));
-            game.players[1].playerArmy.push(cpuArmy.create(data.budget, data.prices, randomStrategy))
-            game.createGame();
-        });
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
-    
-    confirmButton.addEventListener("click", changeBoxContent2);
-})();
-
-
-function createPlanet(planet) {
-    const optionPlanet = document.createElement("option");
-    optionPlanet.className = "planet";
-    optionPlanet.value = planet;
-    optionPlanet.innerText = planet;
-    inputPlanet.appendChild(optionPlanet);
-}
-
-function createArmySelection(army, values) {
-    const chooseArmy = document.createElement("div");
-    chooseArmy.className = "army__unities";
-    const armyType = document.createElement("div");
-    armyType.className = "army-type";
-    armyType.setAttribute("id", army);
-    if(army === "S") {
-        armyType.innerText = "SpaceShip";
-    } else if(army === "C") {
-        armyType.innerText = "SpaceCruiser";
-    } else {
-        armyType.innerText = "SpaceDestroyer";
+armyOperator.forEach((element) => {
+  element.addEventListener("click", (e) => {
+    const styles = e.currentTarget.classList;
+    if (styles.contains("spaceship__increment")) {
+      counter++;
+      spaceshipItem.innerText = counter;
+      resources.innerHTML = "hello";
+    } else if (styles.contains("spaceship__decrement")) {
+      counter--;
+      spaceshipItem.innerText = counter;
     }
-    const armyCost = document.createElement("div");
-    armyCost.className = "army-cost";
-    armyCost.innerText = values;
-    armyChoice.appendChild(chooseArmy);
-    chooseArmy.appendChild(armyType);
-    chooseArmy.appendChild(armyCost);
-}
+    if (styles.contains("spacecruiser__increment")) {
+      counter1++;
+      spacecruiserItem.innerText = counter1;
+    } else if (styles.contains("spacecruiser__decrement")) {
+      counter1--;
+      spacecruiserItem.innerText = counter1;
+    }
+    if (styles.contains("spacedestroyer__increment")) {
+      counter2++;
+      spacedestroyerItem.innerText = counter2;
+    } else if (styles.contains("spacedestroyer__decrement")) {
+      counter2--;
+      spacedestroyerItem.innerText = counter2;
+    }
+  });
+});
 
-function createStrategySelection(strategy) {
-    const optionStrategy = document.createElement("option");
-    optionStrategy.className = "strategy";
-    optionStrategy.value = strategy;
-    optionStrategy.innerText = strategy;
-    strategySelector.appendChild(optionStrategy);
-}
+// spaceshipIncrement.addEventListener("click", () => {
+//   counter++;
+//   updateDisplay(spaceshipItem);
+// });
+// spaceshipDecrement.addEventListener("click", () => {
+//   counter--;
+//   updateDisplay(spaceshipItem);
+// });
+// spacescruiserIncrement.addEventListener("click", () => {
+//   counter++;
+//   updateDisplay(spacecruiserItem);
+// });
+// spacecruiserDecrement.addEventListener("click", () => {
+//   counter--;
+//   updateDisplay(spacecruiserItem);
+// });
+// spacedestroyerIncrement.addEventListener("click", () => {
+//   counter++;
+//   updateDisplay(spacedestroyerItem);
+// });
+// spacedestroyerDecrement.addEventListener("click", () => {
+//   counter--;
+//   updateDisplay(spacedestroyerItem);
+// });
 
+// function updateDisplay(item) {
+//   return (item.innerHTML = counter);
+// }
 
 class Unities {
-    constructor (army, cost) {
-        this.army = army;
-        this.cost = cost;
-    }
+  constructor(army, cost) {
+    this.army = army;
+    this.cost = cost;
+  }
 }
 
 class ComposeArmy {
-    constructor(type) {
-        this.type = type;
-        this.army = [];
-    }
-    create(budget, armySelection, strategy) {
-        //the initial budget i'll use for the error message
-        const initial = budget;
-        const event = this;
-        //if the type of the army is "Human"
-        if(this.type === "Human") {
-            // select all the army-type (spaceCruiser, Destroyer ...)
-            document.querySelectorAll(".army-type").forEach(e => e.addEventListener("click", function() {
-                //find the cost of them with the armySelection object using the id {S:5 ecc}
-                const armyCost = armySelection[this.getAttribute("id")];
-                // if there are less than 10 army and the budget is more than the army cost
-                if(event.army.length < 10 && budget > armyCost) {
-                    // push the UNITIES with name and cost inside the army array used inside composeArmy
-                    event.army.push(new Unities(this.innerText, armyCost));
-                    budget -= armyCost;
-                    resources.innerHTML = "You Have " + budget + " Gold to craft your army";
-                } else {
-                    return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
-                }
-            }));  
-            if(strategy) event.army.push(strategy);
-            return event.army;
-            // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
-        } else {
-            const randomStrategy = [];
-            randomStrategy.push(strategy);
-           
-            const random = randomStrategy[Math.floor(Math.random() * randomStrategy.length)];
-            console.log(random);
-            while(budget > 0 && event.army.length < 10) {
-                const army = Object.keys(armySelection);
-                //take a random type of army and find the cost in armyCost;
-                const randomArmy = army[Math.floor(Math.random() * army.length)];
-                const armyCost = armySelection[randomArmy];
+  constructor(type) {
+    this.type = type;
+    this.army = [];
+  }
+  create() {
+    let gold = 30;
+    const event = this;
+    const armySelection = {
+      SpaceShip: 1,
+      spaceCruiser: 2,
+      spaceDestroyer: 5,
+    };
+    if (this.type === "Human") {
+      document.querySelectorAll(".army-type").forEach((e) =>
+        e.addEventListener("click", function () {
+          const armyCost = armySelection[this.innerText];
+          if (event.army.length < 10 && gold > armyCost) {
+            event.army.push(new Unities(this.innerText, armyCost));
+            gold -= armyCost;
+            resources.innerHTML =
+              "You Have " + gold + " Gold to craft your army";
+          } else {
+            return (resources.innerHTML =
+              "You can't spend more than " + 30 + "gold to craft your army");
+          }
+        })
+      );
+      return event.army;
+    } else {
+      while (gold > 0 && event.army.length < 10) {
+        const army = Object.keys(armySelection);
+        //take a random type of army and find the cost in armyCost;
+        const randomArmy = army[Math.floor(Math.random() * army.length)];
+        const armyCost = armySelection[randomArmy];
 
-                if(budget >= armyCost) {
-                    event.army.push(new Unities(randomArmy, armyCost));
-                    budget -= armyCost;
-                } else {
-                    // if the armyCost is bigger than goldCpu then call the function again to generate another random army
-                    return this.create();
-                }
-            }
-            event.army.push(random);
-            return event.army;
+        if (gold >= armyCost) {
+          event.army.push(new Unities(randomArmy, armyCost));
+          gold -= armyCost;
+        } else {
+          // if the armyCost is bigger than goldCpu then call the function again to generate another random army
+          return create();
         }
-         
+      }
+      return event.army;
     }
+  }
 }
 
 class Player {
-    constructor(type, username, planet) {
-        this.type = type;
-        this.username = username;
-        this.playerArmy = [];
-        this.planet = planet;
-    }
+  constructor(type, name, email, planet) {
+    this.type = type;
+    this.name = name;
+    this.email = email;
+    this.planet = planet;
+    this.playerArmy = [];
+  }
 }
 
 class GameBoard {
-    constructor() {
-        this.players = [];
-    }
-    createGame() {
-        console.log(this.players);
-    } 
+  constructor() {
+    this.players = [];
+  }
+  createGame() {
+    console.log(this.players);
+  }
 }
 
+const humanArmy = new ComposeArmy("Human");
+const cpuArmy = new ComposeArmy("CPU");
+cpuArmy.create();
+humanArmy.create();
+const game = new GameBoard();
 
+(function init() {
+  confirmButton.addEventListener("click", changeBoxContent2);
+  playButton.addEventListener("click", playGame);
+})();
 
-
-
-
-
-const data = 
-    {
-        "attacker": {
-            "uid": "108403865994034697381",
-            "username":"human player 1",
-             "army":{
-                "S":2,
-                "C":1,
-                "D":0,
-                "F":1
-             },
-             "planet":"Venus"
-          }
-
-      }
+const data = {
+  attacker: {
+    uid: "108403865994034697381",
+    username: "human player 1",
+    army: {
+      S: 2,
+      C: 1,
+      D: 0,
+      F: 1,
+    },
+    planet: "Venus",
+  },
+};
 
 function playGame() {
-    fetch("https://browsergameteam2.herokuapp.com/battle/", {
-    method: 'POST', // or 'PUT'
+  fetch("https://browsergameteam2.herokuapp.com/battle/", {
+    method: "POST", // or 'PUT'
     headers: {
-        'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    
+
     body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data1 => {
-    console.log('Success:', data1);
-    displayBattleReport(data1);
+  })
+    .then((response) => response.json())
+    .then((data1) => {
+      console.log("Success:", data1);
+      displayBattleReport(data1);
     })
     .catch((error) => {
-    console.error('Error:', error);
+      console.error("Error:", error);
     });
-    
-    
 }
-
 
 //display nickname and planet name choosen by user and the quantity of gold to craft the army
-function changeBoxContent2(){
-    inputs.style.display = "none";
-    createArmy.style.display = "flex";
-    planetName.innerHTML = "Planet name:" + " " + document.getElementById("input__planet__name").value;
+function changeBoxContent2() {
+  inputs.style.display = "none";
+  createArmy.style.display = "flex";
+  planetName.innerHTML =
+    "Planet name:" + " " + document.getElementById("input__planet__name").value;
+  game.players.push(
+    new Player(
+      "Human",
+      document.getElementById("input__username").value,
+      "test@gmail.com",
+      document.getElementById("input__planet__name").value
+    )
+  );
+  game.players.push(new Player("CPU", "Computer1", "", "Venus"));
 }
 
+startGame.addEventListener("click", function () {
+  game.players[0].playerArmy.push(humanArmy.create());
+  game.players[1].playerArmy.push(cpuArmy.create());
+  game.createGame();
+});
 
+//display battle report
 
-
-
-//display battle report 
-
-function displayBattleReport(data1){
-    document.getElementById("box").innerHTML = " ";
-    var result = document.createElement("div");
-    result.className = "battle__result";
-    document.getElementById("box").appendChild(result);
-    //a function to check if the player is the winner or the loser of the battle
-    function checkScore(data1) {
-        if (data1.winner = "true"){
-        result.innerHTML = "Congratulations" + "<br>" + "You Win!";
-    } else (result.innerHtml = "You Lose!");
-    }
-    checkScore(data1);
-    //create a new element to display the report of the battle
-    var battleReport = document.createElement("div");
-    battleReport.className = "battle__report";
-    result.appendChild(battleReport);
-    battleReport.innerHTML = "Unities left after the battle:" + "<br>" + "<br>" + "C =" + " " + data1.army.C + "<br>" + "<br>" +  "S =" + " " + data1.army.S + "<br>" + "<br>" + " " +  "D =" + " " + data1.army.D;
+function displayBattleReport(data1) {
+  document.getElementById("box").innerHTML = " ";
+  var result = document.createElement("div");
+  result.className = "battle__result";
+  document.getElementById("box").appendChild(result);
+  //a function to check if the player is the winner or the loser of the battle
+  function checkScore(data1) {
+    if ((data1.winner = "true")) {
+      result.innerHTML = "Congratulations" + "<br>" + "You Win!";
+    } else result.innerHtml = "You Lose!";
+  }
+  checkScore(data1);
+  //create a new element to display the report of the battle
+  var battleReport = document.createElement("div");
+  battleReport.className = "battle__report";
+  result.appendChild(battleReport);
+  battleReport.innerHTML =
+    "Unities left after the battle:" +
+    "<br>" +
+    "<br>" +
+    "C =" +
+    " " +
+    data1.army.C +
+    "<br>" +
+    "<br>" +
+    "S =" +
+    " " +
+    data1.army.S +
+    "<br>" +
+    "<br>" +
+    " " +
+    "D =" +
+    " " +
+    data1.army.D;
 }

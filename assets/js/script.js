@@ -45,7 +45,9 @@ const playButton = document.querySelector(".play__btn");
         const cpuArmy = new ComposeArmy("CPU");
 
         // call create method passing the budget and the army with the price object
-        humanArmy.create(data.budget, data.prices);
+        console.log(data.prices);
+        const humanCreation = humanArmy.create(data.budget, data.prices);
+        const cpuCreation = cpuArmy.create(data.budget, data.prices, randomStrategy);
         // instance the gameBoard object 
         const game = new GameBoard();
         /*push inside the players array (property of gameBoard) the player created, Human or CPU with the property:
@@ -55,13 +57,16 @@ const playButton = document.querySelector(".play__btn");
                 this.planet = planet;
                 this.playerArmy = [];  empty array
         */
-        game.players.push(new Player("Human", data.username, document.getElementById("input__planet__name").value));
-        game.players.push(new Player("CPU", "Computer1", "", "Venus"));
+        const humanPlayer = game.players = (new Player("Human", data.username, document.getElementById("input__planet__name").value));
+        const CpuPlayer = game.players = (new Player("virtual", "Computer1", "Venus"));
 
         startGame.addEventListener("click", function() {
+            console.log(game);
             // inside the playerArmy array (now inside the players array that is inside GameBoard) push the army created
-            game.players[0].playerArmy.push(humanArmy.create(data.budget, data.prices, document.querySelector(".select-strategy__selector").value));
-            game.players[1].playerArmy.push(cpuArmy.create(data.budget, data.prices, randomStrategy))
+            humanPlayer.army = humanCreation
+            CpuPlayer.army = cpuCreation
+            humanPlayer.army["F"] = parseInt(document.querySelector(".select-strategy__selector").value);
+            playGame(humanPlayer, CpuPlayer, data.token)
             game.createGame();
         });
     })
@@ -100,6 +105,19 @@ function createArmySelection(army, values) {
     armyChoice.appendChild(chooseArmy);
     chooseArmy.appendChild(armyType);
     chooseArmy.appendChild(armyCost);
+    const plusArmy = document.createElement("span");
+    const decrementArmy = document.createElement("span");
+    plusArmy.className = "army__operator spaceship__increment";
+    plusArmy.innerText = "+";
+    decrementArmy.className = "army__operator spaceship__decrement";
+    decrementArmy.innerText = "-";
+    plusArmy.setAttribute("id", army);
+    decrementArmy.setAttribute("id", army);
+    chooseArmy.appendChild(plusArmy);
+    chooseArmy.appendChild(decrementArmy);
+    armyChoice.appendChild(chooseArmy);
+    chooseArmy.appendChild(armyType);
+    chooseArmy.appendChild(armyCost);
 }
 
 function createStrategySelection(strategy) {
@@ -121,70 +139,89 @@ class Unities {
 class ComposeArmy {
     constructor(type) {
         this.type = type;
-        this.army = [];
+        this.army = {};
     }
     create(budget, armySelection, strategy) {
         //the initial budget i'll use for the error message
         const initial = budget;
         const event = this;
+
+        for(const armies of Object.keys(armySelection)) {
+            this.army[armies];
+            this.army[armies] = 0;
+        }
         //if the type of the army is "Human"
-        if(this.type === "Human") {
+        if(event.type === "Human") {
             // select all the army-type (spaceCruiser, Destroyer ...)
-            document.querySelectorAll(".army-type").forEach(e => e.addEventListener("click", function() {
+            document.querySelectorAll(".army__operator").forEach(e => e.addEventListener("click", function(e) {
                 //find the cost of them with the armySelection object using the id {S:5 ecc}
-                const armyCost = armySelection[this.getAttribute("id")];
-                // if there are less than 10 army and the budget is more than the army cost
-                if(event.army.length < 10 && budget > armyCost) {
-                    // push the UNITIES with name and cost inside the army array used inside composeArmy
-                    event.army.push(new Unities(this.innerText, armyCost));
-                    budget -= armyCost;
-                    resources.innerHTML = "You Have " + budget + " Gold to craft your army";
+                if(this.innerText === "+") {
+                    //find the cost of them with the armySelection object using the id {S:5 ecc}
+                    const armyCost = armySelection[this.getAttribute("id")];
+                    // if there are less than 10 army and the budget is more than the army cost
+                        if(budget > armyCost) {
+                            // push the UNITIES with name and cost inside the army array used inside composeArmy
+                            console.log(event.army[this.getAttribute("id")]);
+                            event.army[this.getAttribute("id")] = (event.army[this.getAttribute("id")]|| 0) + 1;
+                            budget -= armyCost;
+                            resources.innerHTML = "You Have " + budget + " Gold to craft your army";
+                        } else {
+                            return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
+                        }
                 } else {
-                    return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
+                    const armyCost = armySelection[this.getAttribute("id")];
+                    if(event.army[this.getAttribute("id")] >= 0) {
+                        // push the UNITIES with name and cost inside the army array used inside composeArmy
+                        event.army[this.getAttribute("id")] = (event.army[this.getAttribute("id")] || 0) - 1;
+                        budget += armyCost;
+                        resources.innerHTML = "You Have " + budget + " Gold to craft your army";
+                    } else {
+                        return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
+                    }
                 }
+                
             }));  
-            if(strategy) event.army.push(strategy);
             return event.army;
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
         } else {
-            const randomStrategy = [];
-            randomStrategy.push(strategy);
-           
-            const random = randomStrategy[Math.floor(Math.random() * randomStrategy.length)];
-            console.log(random);
-            while(budget > 0 && event.army.length < 10) {
+            
+            while(budget > 0) {
                 const army = Object.keys(armySelection);
                 //take a random type of army and find the cost in armyCost;
                 const randomArmy = army[Math.floor(Math.random() * army.length)];
                 const armyCost = armySelection[randomArmy];
-
+                
                 if(budget >= armyCost) {
-                    event.army.push(new Unities(randomArmy, armyCost));
+                    event.army[randomArmy] = (event.army[randomArmy] || 0) + 1;
                     budget -= armyCost;
                 } else {
+                    
                     // if the armyCost is bigger than goldCpu then call the function again to generate another random army
-                    return this.create();
+                    return event.create(budget, armySelection, strategy);
                 }
+                
             }
-            event.army.push(random);
+            event.army["F"] = strategy;
+            //event.army.push(random);
             return event.army;
         }
          
     }
 }
 
+
 class Player {
     constructor(type, username, planet) {
         this.type = type;
         this.username = username;
-        this.playerArmy = [];
+        this.army = {};
         this.planet = planet;
     }
 }
 
 class GameBoard {
     constructor() {
-        this.players = [];
+        this.players = {};
     }
     createGame() {
         console.log(this.players);
@@ -193,28 +230,41 @@ class GameBoard {
 
 
 
-
-
-
-
-const data = 
-    {
+const data3 = {
+    "data" : {
         "attacker": {
-            "uid": "108403865994034697381",
-            "username":"human player 1",
-             "army":{
-                "S":2,
-                "C":1,
-                "D":0,
-                "F":1
-             },
-             "planet":"Venus"
-          }
+            "type":"human",
+            "name":"player x",
+            "mail":"player@mail.com",
+            "army": {"S":2, "C":5,"D":5,"F":1},
+            "planet":"Venus"
+                    },
+    
+        "defender": {
+            "type":"virtual",
+            "name":"computer 1",
+            "army": {"S":5, "C":6,"D":13,"F":2},
+            "planet":"Mercury"
+            }
+    }
+    
+}
 
-      }
 
-function playGame() {
-    fetch("https://browsergameteam2.herokuapp.com/battle/", {
+
+
+function playGame(human, cpu, token) {
+    console.log(human, cpu, token);
+    const data = {
+        "data": {
+            "attacker": human,
+            "defender": cpu,
+            "token": token
+        }
+    }
+    console.log(data);
+    console.log(JSON.stringify(data));
+    fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
     method: 'POST', // or 'PUT'
     headers: {
         'Content-Type': 'application/json',

@@ -25,29 +25,16 @@ const playButton = document.querySelector(".play__btn");
     .then(response => response.json())
     .then(data => {
     console.log('Success:', data);
-    //function to create all the planet selection
-        for(const planet of data.planets) {
-            createPlanet(planet);
-        }
-    //function to create all the army and the cost before starting the game 
-        for(const [army,values] of Object.entries(data.prices)) {
-            createArmySelection(army, values);
-        }
-//function to create the strategy selection
-        for(const strategy of data["F"]) {
-            createStrategySelection(strategy);
-        }
-        //find a randomStrategy for the CPU
-        const randomStrategy = data["F"][Math.floor(Math.random() * data["F"].length)];
-
+    
+        pageCreation(data.planets, data.prices, data["F"]);
+        
         // compose the army of human an cpu players
-        const humanArmy = new ComposeArmy("Human");
-        const cpuArmy = new ComposeArmy("CPU");
+        const humanArmy = new ComposeArmy("Human", data.prices, data.budget,  );
+        const cpuArmy = new ComposeArmy("CPU", data.prices, data.budget, data["F"]);
 
         // call create method passing the budget and the army with the price object
-        console.log(data.prices);
-        const humanCreation = humanArmy.create(data.budget, data.prices);
-        const cpuCreation = cpuArmy.create(data.budget, data.prices, randomStrategy);
+        const humanCreation = humanArmy.create();
+        const cpuCreation = cpuArmy.create();
         // instance the gameBoard object 
         const game = new GameBoard();
         /*push inside the players array (property of gameBoard) the player created, Human or CPU with the property:
@@ -57,17 +44,15 @@ const playButton = document.querySelector(".play__btn");
                 this.planet = planet;
                 this.playerArmy = [];  empty array
         */
-        const humanPlayer = game.players = (new Player("Human", data.username, document.getElementById("input__planet__name").value));
-        const CpuPlayer = game.players = (new Player("virtual", "Computer1", "Venus"));
+        const humanPlayer = game.attacker = (new Player("Human", data.username, document.getElementById("input__planet__name").value));
+        const CpuPlayer = game.defender = (new Player("virtual", "Computer1", "Venus"));
 
         startGame.addEventListener("click", function() {
-            console.log(game);
             // inside the playerArmy array (now inside the players array that is inside GameBoard) push the army created
-            humanPlayer.army = humanCreation
-            CpuPlayer.army = cpuCreation
+            humanPlayer.army = humanCreation;
+            CpuPlayer.army = cpuCreation;
             humanPlayer.army["F"] = parseInt(document.querySelector(".select-strategy__selector").value);
-            playGame(humanPlayer, CpuPlayer, data.token)
-            game.createGame();
+            game.playGame(data.token)
         });
     })
     .catch((error) => {
@@ -77,6 +62,20 @@ const playButton = document.querySelector(".play__btn");
     confirmButton.addEventListener("click", changeBoxContent2);
 })();
 
+function pageCreation(planetSelection, armySelection, strategySelection) {
+    //function to create all the planet selection
+    for(const planet of planetSelection) {
+        createPlanet(planet);
+    }
+    //function to create all the army and the cost before starting the game 
+    for(const [army,values] of Object.entries(armySelection)) {
+        createArmySelection(army, values);
+    }
+    //function to create the strategy selection
+    for(const strategy of strategySelection) {
+        createStrategySelection(strategy);
+    }
+}
 
 function createPlanet(planet) {
     const optionPlanet = document.createElement("option");
@@ -129,83 +128,87 @@ function createStrategySelection(strategy) {
 }
 
 
-class Unities {
-    constructor (army, cost) {
-        this.army = army;
-        this.cost = cost;
-    }
-}
+   
+  
+
+
+
 
 class ComposeArmy {
-    constructor(type) {
+    constructor(type, armySelection, budget, strategy) {
         this.type = type;
+        this.armySelection = armySelection;
+        this.budget = budget;
+        this.strategy = strategy;
         this.army = {};
-    }
-    create(budget, armySelection, strategy) {
+    }     
+
+    create() {
         //the initial budget i'll use for the error message
-        const initial = budget;
+        const initial = this.budget;
         const event = this;
 
-        for(const armies of Object.keys(armySelection)) {
+        for(const armies of Object.keys(this.armySelection)) {
             this.army[armies];
             this.army[armies] = 0;
         }
         //if the type of the army is "Human"
         if(event.type === "Human") {
             // select all the army-type (spaceCruiser, Destroyer ...)
-            document.querySelectorAll(".army__operator").forEach(e => e.addEventListener("click", function(e) {
+            document.querySelectorAll(".army__operator").forEach(e => e.addEventListener("click", function() {
                 //find the cost of them with the armySelection object using the id {S:5 ecc}
-                if(this.innerText === "+") {
-                    //find the cost of them with the armySelection object using the id {S:5 ecc}
-                    const armyCost = armySelection[this.getAttribute("id")];
-                    // if there are less than 10 army and the budget is more than the army cost
-                        if(budget > armyCost) {
-                            // push the UNITIES with name and cost inside the army array used inside composeArmy
-                            console.log(event.army[this.getAttribute("id")]);
-                            event.army[this.getAttribute("id")] = (event.army[this.getAttribute("id")]|| 0) + 1;
-                            budget -= armyCost;
-                            resources.innerHTML = "You Have " + budget + " Gold to craft your army";
-                        } else {
-                            return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
-                        }
-                } else {
-                    const armyCost = armySelection[this.getAttribute("id")];
-                    if(event.army[this.getAttribute("id")] >= 0) {
-                        // push the UNITIES with name and cost inside the army array used inside composeArmy
-                        event.army[this.getAttribute("id")] = (event.army[this.getAttribute("id")] || 0) - 1;
-                        budget += armyCost;
-                        resources.innerHTML = "You Have " + budget + " Gold to craft your army";
-                    } else {
-                        return resources.innerHTML = "You can't spend more than " + initial + "gold to craft your army"
-                    }
-                }
-                
+                const armyCost = event.armySelection[this.getAttribute("id")];
+                event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial)
+                event.army[this.getAttribute("id")] = event.countArmy(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"));
+                resources.innerHTML = event.budgetMessage(event.budget, initial);
             }));  
-            return event.army;
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
         } else {
-            
-            while(budget > 0) {
-                const army = Object.keys(armySelection);
+            const randomStrategy = event.strategy[Math.floor(Math.random() * event.strategy.length)];
+            while(event.budget > 0) {
+                const army = Object.keys(event.armySelection);
                 //take a random type of army and find the cost in armyCost;
                 const randomArmy = army[Math.floor(Math.random() * army.length)];
-                const armyCost = armySelection[randomArmy];
+                const armyCost = event.armySelection[randomArmy];
                 
-                if(budget >= armyCost) {
+                if(event.budget >= armyCost) {
                     event.army[randomArmy] = (event.army[randomArmy] || 0) + 1;
-                    budget -= armyCost;
+                    event.budget -= armyCost;
                 } else {
                     
                     // if the armyCost is bigger than goldCpu then call the function again to generate another random army
-                    return event.create(budget, armySelection, strategy);
+                    return event.create();
                 }
                 
             }
-            event.army["F"] = strategy;
-            //event.army.push(random);
-            return event.army;
+            event.army["F"] = randomStrategy;
         }
-         
+        return event.army;
+    }
+
+    budgetCalc(budget, operation, armyCost, initial) {
+        if(operation === "+") {
+            return budget >= armyCost ? budget -= armyCost : budget;
+        } else {
+          return budget < initial ? budget += armyCost : budget;
+        }
+      
+      }  
+
+    countArmy(budget, operation, armyCost, initial, event, singleArmy) {
+        if(operation === "+") {
+           return budget >= armyCost ? (event.army[singleArmy]|| 0) + 1 : event.army[singleArmy];
+        } else {
+            return budget <= initial && event.army[singleArmy] >= 0 ? (event.army[singleArmy] || 0) - 1 : event.army[singleArmy];
+          }
+    }
+
+    budgetMessage(budget, initial) {
+        if(budget <= 0) {
+            return "You can't spend more than " + initial + "gold to craft your army"
+        } else {
+            return "You Have " +  budget + " Gold to craft your army"
+        }
     }
 }
 
@@ -221,68 +224,38 @@ class Player {
 
 class GameBoard {
     constructor() {
-        this.players = {};
+        this.attacker = {};
+        this.defender = {};
     }
-    createGame() {
-        console.log(this.players);
-    } 
-}
 
-
-
-const data3 = {
-    "data" : {
-        "attacker": {
-            "type":"human",
-            "name":"player x",
-            "mail":"player@mail.com",
-            "army": {"S":2, "C":5,"D":5,"F":1},
-            "planet":"Venus"
-                    },
-    
-        "defender": {
-            "type":"virtual",
-            "name":"computer 1",
-            "army": {"S":5, "C":6,"D":13,"F":2},
-            "planet":"Mercury"
-            }
-    }
-    
-}
-
-
-
-
-function playGame(human, cpu, token) {
-    console.log(human, cpu, token);
-    const data = {
-        "data": {
-            "attacker": human,
-            "defender": cpu,
-            "token": token
+    playGame(token) {
+        const data = {
+                "attacker": this.attacker,
+                "defender": this.defender,
+                "token": token
         }
+        console.log(data);
+        console.log(JSON.stringify(data));
+        fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+            
+        },
+        
+        body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data1 => {
+        console.log('Success:', data1);
+        displayBattleReport(data1);
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
     }
-    console.log(data);
-    console.log(JSON.stringify(data));
-    fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
-    method: 'POST', // or 'PUT'
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    
-    body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(data1 => {
-    console.log('Success:', data1);
-    displayBattleReport(data1);
-    })
-    .catch((error) => {
-    console.error('Error:', error);
-    });
-    
-    
 }
+
 
 
 //display nickname and planet name choosen by user and the quantity of gold to craft the army

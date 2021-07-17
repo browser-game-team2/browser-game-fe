@@ -10,7 +10,7 @@ class ComposeArmy {
     }     
 
     create() {
-       
+        const points = document.querySelector("")
         const resources = document.getElementById("resources");
          //the initial budget i'll use for the error message
         const initial = this.budget;
@@ -107,7 +107,7 @@ class GameBoard {
                 "defender": this.defender,
                 "token": token
         }
-        fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
+        fetch("https://browsergameteam2.herokuapp.com/battle/", {
         method: 'POST', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',

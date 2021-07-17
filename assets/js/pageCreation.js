@@ -25,8 +25,9 @@ function createPlanet(planet) {
 function createArmySelection(army, values) {
     const armyChoice = document.querySelector(".army");
     const chooseArmy = document.createElement("div");
-    chooseArmy.className = "army__unities";
     const armyType = document.createElement("div");
+    const armyCost = document.createElement("div");
+    chooseArmy.className = "army__unities";
     armyType.className = "army-type";
     armyType.setAttribute("id", army);
     if(army === "S") {
@@ -36,7 +37,7 @@ function createArmySelection(army, values) {
     } else {
         armyType.innerText = "SpaceDestroyer";
     }
-    const armyCost = document.createElement("div");
+    
     armyCost.className = "army-cost";
     armyCost.innerText = values;
     armyChoice.appendChild(chooseArmy);

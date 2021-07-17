@@ -1,0 +1,204 @@
+body {
+margin: auto;
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+background-image: url("/assets/Images/pexels-photo-110854.jpeg");
+background-size: cover;
+background-repeat: no-repeat;
+background-attachment: fixed;
+}
+
+h1{
+    margin-top: 0px;
+    padding-top: 20px;
+    color: white;
+    width: 80%;
+    border-radius: 4px;
+    text-align: center;
+    height: 60px;
+    background-image: linear-gradient(to bottom, #04132a, #192542, #2f385bbd, #474c75c9, #606090c5);
+}
+
+#logo {
+    margin-top: 1rem;
+    width: 150px;
+    height: 150px;
+}
+
+.box {
+    
+    background-image: linear-gradient(to bottom, #04132a, #192542b7, #2f385b, #474c75c5, #606090c2);
+    margin-top: 4rem;
+    border-radius: 4px;
+    height: 350px;
+    width: 20rem;
+}
+/*Authentication*/
+
+#authentication {
+    margin-top: 20px;
+    text-align: center;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: sans-serif;
+    font-size: 24px;
+    color: white;
+}
+
+.authentication__logos {
+    width: 60%;
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+
+}
+
+.ouath__logos {
+    width: 60px;
+    height: 60px;
+}
+
+.ouath__logos:hover{
+    cursor: pointer;
+}
+
+/*inputs for nickname and planet name*/
+
+#inputs {
+    margin: 80px 40px;
+    text-align: center;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+}
+
+.input__field {
+    width: 90%;
+    height: 40px;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 2px;
+    border: solid 0.3px;
+    padding-left: 15px;
+}
+
+.army-type {
+    background-color:green;
+    border-radius:20px;
+    padding:5px;
+    display: inline-block;
+    margin:10px;
+}
+
+.army-type:hover {
+    cursor: pointer;
+}
+
+#confirm__button{
+    height: 30px;
+    width: 60%;
+    margin: 20px auto;
+    border: none;
+    border-radius: 6px;
+    background-color: red;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+}
+
+#confirm__button:hover{
+    cursor: pointer;
+}
+
+/*create army section*/
+
+.create__army{
+    display: none;
+    flex-direction: column;
+    text-align: center;
+    margin-top: 30px;
+    height: 80%;
+    justify-content: space-between;
+    color: white;
+    font-family: sans-serif;
+}
+
+#army{
+    margin-top:5px;
+    margin-bottom:80px;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.start-game__btn { 
+    padding:20px;
+    background-color: red;
+    display:inline-block;
+    width:50%;   
+    border-radius:6px;
+    cursor:pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.play__btn {
+    padding:20px;
+    background-color: red;
+    display:inline-block;
+    width:50%;   
+    border-radius:6px;
+    cursor:pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/*battle report*/
+.battle__result {
+    margin-top: 30px;
+    text-align: center;
+    height: 60%;
+    display: flex;
+    flex-direction: column; 
+    font-family: sans-serif;
+    font-size: 32px;
+    color: white;
+}
+.battle__report {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    color: white;
+    font-size: 18px;
+}
+
+.army__operator {
+    font-size: 25px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .army__operator:hover {
+    cursor: pointer;
+  }
+  .spaceship__decrement,
+  .spacecruiser__decrement,
+  .spacedestroyer__decrement {
+    color: red;
+  }
+  .spaceship__increment,
+  .spacecruiser__increment,
+  .spacedestroyer__increment {
+    color: green;
+  }
+  .army__unities {
+    position: relative;
+  }

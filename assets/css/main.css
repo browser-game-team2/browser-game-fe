@@ -180,3 +180,25 @@ h1{
     color: white;
     font-size: 18px;
 }
+
+.army__operator {
+    font-size: 25px;
+    font-weight: 600;
+    display: inline-block;
+  }
+  .army__operator:hover {
+    cursor: pointer;
+  }
+  .spaceship__decrement,
+  .spacecruiser__decrement,
+  .spacedestroyer__decrement {
+    color: red;
+  }
+  .spaceship__increment,
+  .spacecruiser__increment,
+  .spacedestroyer__increment {
+    color: green;
+  }
+  .army__unities {
+    position: relative;
+  }

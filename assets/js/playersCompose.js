@@ -107,7 +107,7 @@ class GameBoard {
                 "defender": this.defender,
                 "token": token
         }
-        fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
+        fetch("https://browsergameteam2.herokuapp.com/battle/", {
         method: 'POST', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',

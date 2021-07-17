@@ -10,7 +10,6 @@ class ComposeArmy {
     }     
 
     create() {
-       
         const resources = document.getElementById("resources");
          //the initial budget i'll use for the error message
         const initial = this.budget;

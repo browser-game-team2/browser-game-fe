@@ -63,7 +63,13 @@ function createStrategySelection(strategy) {
     const optionStrategy = document.createElement("option");
     optionStrategy.className = "strategy";
     optionStrategy.value = strategy;
-    optionStrategy.innerText = strategy;
+
+    if (optionStrategy.value === "1") {
+        optionStrategy.innerText = strategy + " " + "-" + " " + "Frontal Assault";
+    } else if (optionStrategy.value === "2") {
+        optionStrategy.innerText = strategy + " " + "-" + " " + "Flanking";
+    } else {optionStrategy.innerText = strategy + " " + "-" + " " + "Scattered Troups";}
+    
     strategySelector.appendChild(optionStrategy);
 }
 

@@ -42,6 +42,7 @@ const authentication = document.getElementById("authentication");
         startGame.addEventListener("click", function() {
             // after pressing start, push inside the army object the human create and cpu create func to generate the army selected
             humanPlayer.army = humanCreation;
+            console.log(humanPlayer);
             CpuPlayer.army = cpuCreation;
             // pass the strategy selected inside humanPlayer
             humanPlayer.army["F"] = parseInt(document.querySelector(".select-strategy__selector").value);

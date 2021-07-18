@@ -9,6 +9,7 @@ const authentication = document.getElementById("authentication");
     const confirmButton = document.getElementById("confirm__button");
     const startGame = document.querySelector(".start-game__btn");
     // request for choose test
+    console.log(getCookie('sessionid'));
     fetch("https://browsergameteam2.herokuapp.com/choose/", {
     method: 'GET', // or 'PUT'
     headers: {

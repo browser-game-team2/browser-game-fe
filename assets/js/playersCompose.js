@@ -29,9 +29,10 @@ class ComposeArmy {
                 //find the cost of them with the armySelection object using the id {S:5 ecc}
                 const armyCost = event.armySelection[this.getAttribute("id")];
                 // calculating the budget after a selection
-                event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial)
-                // calculating the army count after a selection
                 event.army[this.getAttribute("id")] = event.countArmy(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"));
+                event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"))
+                // calculating the army count after a selection
+                
                 resources.innerHTML = event.budgetMessage(event.budget, initial);
             }));  
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
@@ -58,11 +59,11 @@ class ComposeArmy {
         return event.army;
     }
 
-    budgetCalc(budget, operation, armyCost, initial) {
+    budgetCalc(budget, operation, armyCost, initial, event, singleArmy) {
         if(operation === "+") {
             return budget >= armyCost ? budget -= armyCost : budget;
         } else {
-          return budget < initial ? budget += armyCost : budget;
+          return budget < initial && event.army[singleArmy] > 0 ? budget += armyCost : budget;
         }
       
       }  
@@ -71,7 +72,7 @@ class ComposeArmy {
         if(operation === "+") {
            return budget >= armyCost ? (event.army[singleArmy]|| 0) + 1 : event.army[singleArmy];
         } else {
-            return budget <= initial && event.army[singleArmy] >= 0 ? (event.army[singleArmy] || 0) - 1 : event.army[singleArmy];
+            return budget < initial && event.army[singleArmy] > 0 ? (event.army[singleArmy] || 0) - 1 : event.army[singleArmy];
           }
     }
 
@@ -106,7 +107,8 @@ class GameBoard {
                 "defender": this.defender,
                 "token": token
         }
-        fetch("https://browsergameteam2.herokuapp.com/battle/", {
+        console.log(data);
+        fetch("https://browsergameteam2.herokuapp.com/battletemp/", {
         method: 'POST', // or 'PUT'
         headers: {
             'Content-Type': 'application/json',

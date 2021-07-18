@@ -9,7 +9,7 @@ const authentication = document.getElementById("authentication");
     const confirmButton = document.getElementById("confirm__button");
     const startGame = document.querySelector(".start-game__btn");
     // request for choose test
-    fetch("https://browsergameteam2.herokuapp.com/choose/", {
+    fetch("https://browsergameteam2.herokuapp.com/choosetemp/", {
     method: 'GET', // or 'PUT'
     headers: {
         'Content-Type': 'application/json',
@@ -36,13 +36,13 @@ const authentication = document.getElementById("authentication");
                 this.army = {};   empty object
                 this.planet = planet;
         */
-        const humanPlayer = game.attacker = (new Player("Human", data.username, document.getElementById("input__planet__name").value));
+        const humanPlayer = game.attacker = (new Player("Human", data.username));
         const CpuPlayer = game.defender = (new Player("virtual", "Computer1", "Venus"));
 
         startGame.addEventListener("click", function() {
             // after pressing start, push inside the army object the human create and cpu create func to generate the army selected
             humanPlayer.army = humanCreation;
-            console.log(humanPlayer);
+            humanPlayer.planet = document.getElementById("input__planet__name").value;
             CpuPlayer.army = cpuCreation;
             // pass the strategy selected inside humanPlayer
             humanPlayer.army["F"] = parseInt(document.querySelector(".select-strategy__selector").value);

@@ -14,7 +14,7 @@ const authentication = document.getElementById("authentication");
     method: 'GET', // or 'PUT'
     headers: {
         'Content-Type': 'application/json',
-        'Cookie': getCookie('sessionid')
+        'X-CSRFToken': getCookie('csrftoken')
     },
     })
     .then(response => response.json())

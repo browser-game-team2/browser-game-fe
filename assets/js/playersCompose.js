@@ -13,7 +13,7 @@ class ComposeArmy {
         const resources = document.getElementById("resources");
          //the initial budget i'll use for the error message
         const initial = this.budget;
-
+        const counter = document.querySelectorAll(".counter__army");
         const event = this;
 
         //generating the object army I need to count how many armies I selected
@@ -21,7 +21,7 @@ class ComposeArmy {
             this.army[armies];
             this.army[armies] = 0;
         }
-
+        
         //if the type of the army is "Human"
         if(event.type === "Human") {
             // select + or - to increment or decrement the number of army
@@ -32,7 +32,8 @@ class ComposeArmy {
                 event.army[this.getAttribute("id")] = event.countArmy(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"));
                 event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"))
                 // calculating the army count after a selection
-                
+                counter.forEach(e => {if(e.getAttribute("id") === this.getAttribute("id")) return e.innerText = event.army[this.getAttribute("id")];})
+            
                 resources.innerHTML = event.budgetMessage(event.budget, initial);
             }));  
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10

@@ -27,6 +27,10 @@ function createArmySelection(army, values) {
     const chooseArmy = document.createElement("div");
     const armyType = document.createElement("div");
     const armyCost = document.createElement("div");
+    const counterArmy = document.createElement("span");
+    counterArmy.className = `counter__army`;
+    counterArmy.setAttribute("id", army);
+    counterArmy.innerText = 0;
     chooseArmy.className = "army__unities";
     armyType.className = "army-type";
     armyType.setAttribute("id", army);
@@ -52,9 +56,10 @@ function createArmySelection(army, values) {
     plusArmy.setAttribute("id", army);
     decrementArmy.setAttribute("id", army);
     chooseArmy.appendChild(plusArmy);
-    chooseArmy.appendChild(decrementArmy);
-    armyChoice.appendChild(chooseArmy);
     chooseArmy.appendChild(armyType);
+    chooseArmy.appendChild(decrementArmy);
+    chooseArmy.appendChild(counterArmy);
+    armyChoice.appendChild(chooseArmy); 
     chooseArmy.appendChild(armyCost);
 }
 

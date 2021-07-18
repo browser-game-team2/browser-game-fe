@@ -19,6 +19,7 @@ const authentication = document.getElementById("authentication");
     })
     .then(response => response.json())
     .then(data => {
+        console.log(document.cookie);
     console.log('Success:', data);
         
         pageCreation(data.planets, data.prices, data["F"]);

@@ -150,6 +150,10 @@ h1{
     font-weight: bold;
 }
 
+.counter__army {
+    margin-left: 10px;
+}
+
 .play__btn {
     padding:20px;
     background-color: red;

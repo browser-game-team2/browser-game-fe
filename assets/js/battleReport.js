@@ -35,6 +35,29 @@ function displayBattleReport(data1){
     "S = " + data1.army.S + 
     "  C = " + data1.army.C + 
     "  D = " + data1.army.D;
+   
+    test(data1, battleReport);
+
+}
+
+function test (data1, battleReport) {
+    const detailedReportButton = document.createElement("button");
+    battleReport.appendChild(detailedReportButton);
+    detailedReportButton.className = "btn__modifier start-game__btn";
+    detailedReportButton.innerHTML = "Open detailed report";
+
+    detailedReportButton.addEventListener("click", function (){
+        const detailedReportContainer = document.createElement("div");
+        detailedReportContainer.className = "detailed__report box";
+        battleReport.appendChild(detailedReportContainer);
+        const detailedReport = Object.entries(data1.report);
+    
+        for (let i = 0; i < detailedReport.length; i++){
+        const displayDetailedReport = document.createElement("div");
+        displayDetailedReport.innerHTML = "Round" + " " + i + ": " + Object.entries(data1.report[i]) + "<br>";
+        detailedReportContainer.appendChild(displayDetailedReport);
+        }
+    });
 }
 
 export {displayBattleReport}

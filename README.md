@@ -76,6 +76,7 @@ class GameBoard {
 	    }
 }
 ```
-The ComposeArmy class contain also a create method we used to generate the Human player army and the CPU one (random army).
-We put into the attacker and defender empty object (properties of the GameBoard class) the two player instance with the data of the player (Human and Cpu). The token is passed to playGame method inside the gameBoard object.
+The ComposeArmy class contain also a **create** method we used to generate the Human player army and the CPU one (random army).
+We put into the attacker and defender empty object (properties of the GameBoard class) the two players obj instances with the data of the player (Human is attacker and Cpu si defender). 
+The token is passed then to make the /battle/ fetch.
 

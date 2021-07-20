@@ -67,7 +67,7 @@ class ComposeArmy {
 }
 ```
 
--The last one is the GameBoard class with the two empty object where the players Object’ll be put into after filled. 
+-The last one is the GameBoard class with the two empty object where the players Object’ll be put into after has been filled. 
 ```
 class GameBoard {
 	    constructor() {

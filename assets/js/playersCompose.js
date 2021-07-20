@@ -15,7 +15,7 @@ class ComposeArmy {
         const initial = this.budget;
         const counter = document.querySelectorAll(".counter__army");
         const event = this;
-
+        
         //generating the object army I need to count how many armies I selected
         for(const armies of Object.keys(this.armySelection)) {
             this.army[armies];
@@ -26,6 +26,7 @@ class ComposeArmy {
         if(event.type === "Human") {
             // select + or - to increment or decrement the number of army
             document.querySelectorAll(".army__operator").forEach(e => e.addEventListener("click", function() {
+                
                 //find the cost of them with the armySelection object using the id {S:5 ecc}
                 const armyCost = event.armySelection[this.getAttribute("id")];
                 // calculating the budget after a selection

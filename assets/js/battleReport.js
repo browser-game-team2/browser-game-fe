@@ -1,7 +1,7 @@
-
 //display battle report 
 
 function displayBattleReport(data1){
+    var a = "Attacker"
     document.getElementById("box").innerHTML = " ";
     var result = document.createElement("div");
     result.className = "battle__result";
@@ -11,6 +11,7 @@ function displayBattleReport(data1){
         if (data1.winner === true){
             result.innerHTML = "Congratulations" + "<br>" + "You Win!";}
         else {
+            a = "Defender"
             result.innerHTML = "You Lost!";}
     }
     checkScore(data1);
@@ -18,7 +19,21 @@ function displayBattleReport(data1){
     var battleReport = document.createElement("div");
     battleReport.className = "battle__report";
     result.appendChild(battleReport);
-    battleReport.innerHTML = "[Winner] Unities left after the battle:" + "<br>" + "<br>" + "S =" + " " + data1.army.S + "<br>" + "<br>" +  "C =" + " " + data1.army.C + "<br>" + "<br>" + " " +  "D =" + " " + data1.army.D;
+    battleReport.innerHTML = "Army Attacker (You)" + "<br>" +
+    "S = " + data1.init_a_army.S + 
+    " C = " + data1.init_a_army.C + 
+    " D = " + data1.init_a_army.D + "<br>" +
+    "Strategy = F" + data1.init_a_army.F + "<br>" + "<br>" +
+    "Army Defender (PC)" + "<br>" +
+    "S = " + data1.init_d_army.S + 
+    " C = " + data1.init_d_army.C + 
+    " D = " + data1.init_d_army.D + "<br>" + 
+    "Strategy = F" + data1.init_d_army.F + "<br>" + "<br>" +
+    "Winner = " + a + "<br>" + 
+    "Unities left after the battle" + "<br>" + 
+    "S = " + data1.army.S + 
+    "  C = " + data1.army.C + 
+    "  D = " + data1.army.D;
 }
 
 export {displayBattleReport}

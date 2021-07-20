@@ -36,17 +36,18 @@ function displayBattleReport(data1){
     "  C = " + data1.army.C + 
     "  D = " + data1.army.D;
    
-    test(data1, battleReport);
+    displayDetailedBattleReport(data1, battleReport);
 
 }
 
-function test (data1, battleReport) {
+function displayDetailedBattleReport (data1, battleReport) {
     const detailedReportButton = document.createElement("button");
     battleReport.appendChild(detailedReportButton);
     detailedReportButton.className = "btn__modifier start-game__btn";
     detailedReportButton.innerHTML = "Open detailed report";
 
     detailedReportButton.addEventListener("click", function (){
+        detailedReportButton.style.display = "none";
         const detailedReportContainer = document.createElement("div");
         detailedReportContainer.className = "detailed__report box";
         battleReport.appendChild(detailedReportContainer);

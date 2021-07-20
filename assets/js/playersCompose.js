@@ -10,29 +10,31 @@ class ComposeArmy {
     }     
 
     create() {
-       
         const resources = document.getElementById("resources");
          //the initial budget i'll use for the error message
         const initial = this.budget;
-
+        const counter = document.querySelectorAll(".counter__army");
         const event = this;
-
+        
         //generating the object army I need to count how many armies I selected
         for(const armies of Object.keys(this.armySelection)) {
             this.army[armies];
             this.army[armies] = 0;
         }
-
+        
         //if the type of the army is "Human"
         if(event.type === "Human") {
             // select + or - to increment or decrement the number of army
             document.querySelectorAll(".army__operator").forEach(e => e.addEventListener("click", function() {
+                
                 //find the cost of them with the armySelection object using the id {S:5 ecc}
                 const armyCost = event.armySelection[this.getAttribute("id")];
                 // calculating the budget after a selection
-                event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial)
-                // calculating the army count after a selection
                 event.army[this.getAttribute("id")] = event.countArmy(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"));
+                event.budget = event.budgetCalc(event.budget, this.innerText, armyCost, initial, event, this.getAttribute("id"))
+                // calculating the army count after a selection
+                counter.forEach(e => {if(e.getAttribute("id") === this.getAttribute("id")) return e.innerText = event.army[this.getAttribute("id")];})
+            
                 resources.innerHTML = event.budgetMessage(event.budget, initial);
             }));  
             // if the type is CPU than continue to add unities until the budget is zero and the army length is 10
@@ -59,11 +61,11 @@ class ComposeArmy {
         return event.army;
     }
 
-    budgetCalc(budget, operation, armyCost, initial) {
+    budgetCalc(budget, operation, armyCost, initial, event, singleArmy) {
         if(operation === "+") {
             return budget >= armyCost ? budget -= armyCost : budget;
         } else {
-          return budget < initial ? budget += armyCost : budget;
+          return budget < initial && event.army[singleArmy] > 0 ? budget += armyCost : budget;
         }
       
       }  
@@ -72,7 +74,7 @@ class ComposeArmy {
         if(operation === "+") {
            return budget >= armyCost ? (event.army[singleArmy]|| 0) + 1 : event.army[singleArmy];
         } else {
-            return budget <= initial && event.army[singleArmy] >= 0 ? (event.army[singleArmy] || 0) - 1 : event.army[singleArmy];
+            return budget < initial && event.army[singleArmy] > 0 ? (event.army[singleArmy] || 0) - 1 : event.army[singleArmy];
           }
     }
 
@@ -107,6 +109,7 @@ class GameBoard {
                 "defender": this.defender,
                 "token": token
         }
+        console.log(data);
         fetch("https://browsergameteam2.herokuapp.com/battle/", {
         method: 'POST', // or 'PUT'
         headers: {

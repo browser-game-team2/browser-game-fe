@@ -9,14 +9,17 @@ const authentication = document.getElementById("authentication");
     const confirmButton = document.getElementById("confirm__button");
     const startGame = document.querySelector(".start-game__btn");
     // request for choose test
+    console.log(document.cookie);
     fetch("https://browsergameteam2.herokuapp.com/choose/", {
     method: 'GET', // or 'PUT'
     headers: {
         'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
     },
     })
     .then(response => response.json())
     .then(data => {
+        console.log(document.cookie);
     console.log('Success:', data);
         
         pageCreation(data.planets, data.prices, data["F"]);
@@ -36,12 +39,13 @@ const authentication = document.getElementById("authentication");
                 this.army = {};   empty object
                 this.planet = planet;
         */
-        const humanPlayer = game.attacker = (new Player("Human", data.username, document.getElementById("input__planet__name").value));
+        const humanPlayer = game.attacker = (new Player("Human", data.username));
         const CpuPlayer = game.defender = (new Player("virtual", "Computer1", "Venus"));
 
         startGame.addEventListener("click", function() {
             // after pressing start, push inside the army object the human create and cpu create func to generate the army selected
             humanPlayer.army = humanCreation;
+            humanPlayer.planet = document.getElementById("input__planet__name").value;
             CpuPlayer.army = cpuCreation;
             // pass the strategy selected inside humanPlayer
             humanPlayer.army["F"] = parseInt(document.querySelector(".select-strategy__selector").value);
@@ -56,7 +60,20 @@ const authentication = document.getElementById("authentication");
     confirmButton.addEventListener("click", changeBoxContent2);
 })();
 
-
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 
 

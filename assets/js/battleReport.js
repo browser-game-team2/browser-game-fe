@@ -9,10 +9,10 @@ function displayBattleReport(data1){
     //a function to check if the player is the winner or the loser of the battle
     function checkScore(data1) {
         if (data1.winner === true){
-            result.innerHTML = "Congratulations" + "<br>" + "You Win!";}
+            result.innerHTML = data1.planets[1] + " Conquered!";}
         else {
             a = "Defender"
-            result.innerHTML = "You Lost!";}
+            result.innerHTML = "You Lost " + data1.planets[0] + "!";}
     }
     checkScore(data1);
     //create a new element to display the report of the battle
@@ -24,7 +24,7 @@ function displayBattleReport(data1){
     " C = " + data1.init_a_army.C + 
     " D = " + data1.init_a_army.D + "<br>" +
     "Strategy = F" + data1.init_a_army.F + "<br>" + "<br>" +
-    "Army Defender (PC)" + "<br>" +
+    "Army Defender (cpu)" + "<br>" +
     "S = " + data1.init_d_army.S + 
     " C = " + data1.init_d_army.C + 
     " D = " + data1.init_d_army.D + "<br>" + 

@@ -2,6 +2,9 @@
 
 function displayBattleReport(data1){
     var a = "Attacker"
+    var s = {1:"Frontal Assault",
+             2:"Flanking",
+             3:"Scattered Troops"}   
     document.getElementById("box").innerHTML = " ";
     var result = document.createElement("div");
     result.className = "battle__result";
@@ -19,16 +22,16 @@ function displayBattleReport(data1){
     var battleReport = document.createElement("div");
     battleReport.className = "battle__report";
     result.appendChild(battleReport);
-    battleReport.innerHTML = "Army Attacker (You)" + "<br>" +
+    battleReport.innerHTML = "Army Attacker (you)" + "<br>" +
     "S = " + data1.init_a_army.S + 
     " C = " + data1.init_a_army.C + 
     " D = " + data1.init_a_army.D + "<br>" +
-    "Strategy = F" + data1.init_a_army.F + "<br>" + "<br>" +
+    "Strategy = " + s[data1.init_a_army.F] + "<br>" + "<br>" +
     "Army Defender (cpu)" + "<br>" +
     "S = " + data1.init_d_army.S + 
     " C = " + data1.init_d_army.C + 
     " D = " + data1.init_d_army.D + "<br>" + 
-    "Strategy = F" + data1.init_d_army.F + "<br>" + "<br>" +
+    "Strategy = " + s[data1.init_d_army.F] + "<br>" + "<br>" +
     "Winner = " + a + "<br>" + 
     "Unities left after the battle" + "<br>" + 
     "S = " + data1.army.S + 

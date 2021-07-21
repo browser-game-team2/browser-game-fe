@@ -53,7 +53,6 @@ function displayDetailedBattleReport (data1, battleReport) {
         battleReport.appendChild(detailedReportContainer);
         const detailedReport = Object.entries(data1.report);
         const titleDetailedReport = document.createElement("div");
-        [Fixed] layout of the battle detailed report
         titleDetailedReport.innerHTML = "UNITIES LOST" + "<br>" +
         "<i>" + " (during the battle) " + "</i>" + "<br>" + "<br>";
         for (let i = 0; i < detailedReport.length; i++){

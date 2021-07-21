@@ -32,7 +32,7 @@ h1{
     background-image: linear-gradient(to bottom, #04132a, #192542b7, #2f385b, #474c75c5, #606090c2);
     margin-top: 2.5rem;
     border-radius: 4px;
-    height: 350px;
+    height: 400px; /* previous value 350px */
     width: 20rem;
 }
 /*Authentication*/
@@ -215,8 +215,9 @@ h1{
   }
 
   .detailed__report {
-      margin-top: 40px;
-      width: 25rem;
+      margin-top: 80px; /* previous value 40px */
+      border-radius: 4px; /* no previous value */
+      width: 16.5rem; /* previous value 25rem */
       height: fit-content;
       padding: 30px;
   }

@@ -1,7 +1,7 @@
 //display battle report 
 
 function displayBattleReport(data1){
-    var a = "Attacker"
+    var a = "ATTACKER"
     var s = ["Frontal Assault", "Flanking", "Scattered Troops"]   
     document.getElementById("box").innerHTML = " ";
     var result = document.createElement("div");
@@ -12,7 +12,7 @@ function displayBattleReport(data1){
         if (data1.winner === true){
             result.innerHTML = data1.planets[1] + " Conquered!";}
         else {
-            a = "Defender"
+            a = "DEFENDER"
             result.innerHTML = "You Lost " + data1.planets[0] + "!";}
     }
     checkScore(data1);
@@ -20,21 +20,21 @@ function displayBattleReport(data1){
     var battleReport = document.createElement("div");
     battleReport.className = "battle__report";
     result.appendChild(battleReport);
-    battleReport.innerHTML = "Army Attacker (you)" + "<br>" +
-    "S = " + data1.init_a_army.S + 
-    " C = " + data1.init_a_army.C + 
-    " D = " + data1.init_a_army.D + "<br>" +
-    "Strategy = " + s[[data1.init_a_army.F]-1] + "<br>" + "<br>" +
-    "Army Defender (cpu)" + "<br>" +
-    "S = " + data1.init_d_army.S + 
-    " C = " + data1.init_d_army.C + 
-    " D = " + data1.init_d_army.D + "<br>" + 
-    "Strategy = " + s[[data1.init_d_army.F]-1] + "<br>" + "<br>" +
-    "Winner = " + a + "<br>" + 
-    "Unities left after the battle" + "<br>" + 
-    "S = " + data1.army.S + 
-    "  C = " + data1.army.C + 
-    "  D = " + data1.army.D;
+    battleReport.innerHTML = "<b>" + "ARMY ATTACKER (you)" + "</b>" +
+    "S : " + data1.init_a_army.S + "  ,  " + 
+    "C : " + data1.init_a_army.C + "  ,  " +
+    "D : " + data1.init_a_army.D + "<br>" +
+    "<i>" + "Strategy: " + s[[data1.init_a_army.F]-1] + "</i>" + "<br>" +
+    "<b>" + "ARMY DEFENDER (cpu)" + "</b>" +
+    "S : " + data1.init_d_army.S + "  ,  " + 
+    "C : " + data1.init_d_army.C + "  ,  " + 
+    "D : " + data1.init_d_army.D + "<br>" + 
+    "<i>" + "Strategy: " + s[[data1.init_d_army.F]-1] + "</i>" + "<br>" +
+    "<b>" + "WINNER = " + a + "</b>" +  
+    "Unities left after the battle:" + "<br>" + 
+    "S : " + data1.army.S + "  ,  " + 
+    "C : " + data1.army.C + "  ,  " + 
+    "D : " + data1.army.D;
    
     displayDetailedBattleReport(data1, battleReport);
 
@@ -52,10 +52,17 @@ function displayDetailedBattleReport (data1, battleReport) {
         detailedReportContainer.className = "detailed__report box";
         battleReport.appendChild(detailedReportContainer);
         const detailedReport = Object.entries(data1.report);
-    
+        const titleDetailedReport = document.createElement("div");
+        titleDetailedReport.innerHTML = "UNITIES LOST DURING THE BATTLE" + "<br>" + "<br>";
+        detailedReportContainer.appendChild(titleDetailedReport);
         for (let i = 0; i < detailedReport.length; i++){
+            var r = "SPECIAL ROUND"
+            if (i > 0) {
+                r = "ROUND N." + i;}
         const displayDetailedReport = document.createElement("div");
-        displayDetailedReport.innerHTML = "Round" + " " + i + ": " + Object.entries(data1.report[i]) + "<br>";
+        displayDetailedReport.innerHTML = r + "<br>" +
+        "Attacker : " + data1.report[i]["a"] + "<br>" +
+        "Defender : " + data1.report[i]["d"] + "<br>" + "<br>";
         detailedReportContainer.appendChild(displayDetailedReport);
         }
     });

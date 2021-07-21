@@ -65,7 +65,7 @@ class ComposeArmy {
         if(operation === "+") {
             return budget >= armyCost ? budget -= armyCost : budget;
         } else {
-          return budget < initial && event.army[singleArmy] > 0 ? budget += armyCost : budget;
+          return budget < initial && event.army[singleArmy] >= 0 ? budget += armyCost : budget;
         }
       
       }  

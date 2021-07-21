@@ -55,7 +55,7 @@ function displayDetailedBattleReport (data1, battleReport) {
         const titleDetailedReport = document.createElement("div");
         [Fixed] layout of the battle detailed report
         titleDetailedReport.innerHTML = "UNITIES LOST" + "<br>" +
-        "<i>" + "(during the battle)" + "</i>" + "<br>" + "<br>";
+        "<i>" + " (during the battle) " + "</i>" + "<br>" + "<br>";
         for (let i = 0; i < detailedReport.length; i++){
             var r = "SPECIAL ROUND"
             if (i > 0) {
